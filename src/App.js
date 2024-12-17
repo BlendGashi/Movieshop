@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 
@@ -19,8 +20,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} /> 
         <Route path="/shop" element={<Shop />} /> 
-        <Route path="movie/id:" element={<ViewMovie />} /> 
-        <Route path="cart" element={<Cart />} /> 
+        <Route path="/movie/:id" element={<ViewMovie />} /> 
+        <Route path="/cart" element={<Cart />} /> 
         <Route path="/favourites" element={<FavMovies />} /> 
         <Route path="/login" element={<Login />} /> 
         <Route path="/register" element={<Register />} /> 
