@@ -1,9 +1,11 @@
+import { useLocalStorage } from '@uidotdev/usehooks';
 import React from 'react';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
 
 
 function Menu() {
+  const [cart, saveCart] = useLocalStorage('cart', [])
 
   const handleLogout = e =>{
     e.preventDefault()
@@ -12,8 +14,8 @@ function Menu() {
     <Nav className="ms-auto">
             <Nav.Link href="/">Home</Nav.Link>
             <Nav.Link href="/shop">Shop</Nav.Link>
-            <Nav.Link href="/favourits">Favourites</Nav.Link>
-            <Nav.Link href="/cart">Cart (0)</Nav.Link>
+            <Nav.Link href="/favourites">Favourites</Nav.Link>
+            <Nav.Link href="/cart">Cart ({cart.length})</Nav.Link>
             <NavDropdown title="Text" id="basic-nav-dropdown">
               <NavDropdown.Item href="/login">Login</NavDropdown.Item>
               <NavDropdown.Item href="/register">Register</NavDropdown.Item>
