@@ -6,6 +6,7 @@ import NavDropdown from 'react-bootstrap/NavDropdown';
 
 function Menu() {
   const [cart, saveCart] = useLocalStorage('cart', [])
+  const [user, saveUser] = useLocalStorage('user', {})
 
   const handleLogout = e =>{
     e.preventDefault()
@@ -17,11 +18,18 @@ function Menu() {
             <Nav.Link href="/favourites">Favourites</Nav.Link>
             <Nav.Link href="/cart">Cart ({cart.length})</Nav.Link>
             <NavDropdown title="Text" id="basic-nav-dropdown">
-              <NavDropdown.Item href="/login">Login</NavDropdown.Item>
-              <NavDropdown.Item href="/register">Register</NavDropdown.Item>
-              <NavDropdown.Item href="/dashboard">Dashboard</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item href="#" onClick={handleLogout} >Logout</NavDropdown.Item>
+              {
+                (user && user.email) ? <>
+                <NavDropdown.Item href="/dashboard">Dashboard</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#" onClick={handleLogout} >Logout</NavDropdown.Item>
+                </> :
+                <>
+                <NavDropdown.Item href="/login">Login</NavDropdown.Item>
+                <NavDropdown.Item href="/register">Register</NavDropdown.Item>
+                </>
+              }
+              
             </NavDropdown>
           </Nav>
   )
