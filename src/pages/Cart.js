@@ -1,11 +1,16 @@
 import { useLocalStorage } from '@uidotdev/usehooks'
+import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { Container } from 'react-bootstrap'
-import { Button } from 'react-bootstrap'
+import { Container, Button } from 'react-bootstrap'
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Cart() {
   const [cart, saveCart] = useLocalStorage('cart', [])
+    const [user, saveUser] = useLocalStorage('user', {})
   const [total, setTotal] = useState(0.0)
+  const navigate = useNavigate()
 
   useEffect(() => {
     setTotal(cart.reduce((sum, movie) => sum + (movie.qty * parseFloat(movie.vote_average)), 0.0))
@@ -34,6 +39,27 @@ function Cart() {
       saveCart([...cart.filter((movie, key) => key != index)])
       alert('Item was deleted successfully.')
     }
+  }
+
+  const handleOrderCreation = e => {
+    e.preventDefault()
+    const elements = e.target.elements
+    const address = elements['address'].value
+
+    axios(
+      {
+        method: 'POST',
+        url: 'https://67643bae52b2a7619f5be822.mockapi.io/api/v1/orders',
+        data:{userId: user.id, items: cart, address}
+      }
+    ).then(resp => {
+      if (resp.status === 201){
+      saveCart([])
+      navigate('/dashboard')
+      }else {
+        alert('Something went wrong - try again');
+      }
+    }).catch(e => console.log(e))
   }
 
   return (
@@ -73,6 +99,24 @@ function Cart() {
         </tfoot>
       </table>
       }
+      {
+        (user && user.email) ? <>
+        <h3>Checkout</h3>
+        <form onSubmit={handleOrderCreation}>
+          <FloatingLabel controlId="address" label="Address">
+            <Form.Control
+              name="address"
+              as="textarea"
+              placeholder="Enter your address"
+              className='mb-2'
+              style={{ height: '100px' }}
+            />
+          </FloatingLabel>
+          <Button type="submit" variant="outline-primary">Submit</Button>
+        </form>
+        </> : (cart && cart.length > 0) && <p>Please <Link to="/login">login</Link> first.</p>
+      }
+    
     </Container>
     </section>
   )
