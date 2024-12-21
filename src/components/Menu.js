@@ -2,14 +2,17 @@ import { useLocalStorage } from '@uidotdev/usehooks';
 import React from 'react';
 import Nav from 'react-bootstrap/Nav';
 import NavDropdown from 'react-bootstrap/NavDropdown';
+import { useNavigate } from 'react-router-dom';
 
 
 function Menu() {
   const [cart, saveCart] = useLocalStorage('cart', [])
   const [user, saveUser] = useLocalStorage('user', {})
+  const navigator = useNavigate()
 
   const handleLogout = e =>{
-    e.preventDefault()
+    saveUser({})
+    navigator('/')
   }
   return (
     <Nav className="ms-auto">
@@ -17,7 +20,7 @@ function Menu() {
             <Nav.Link href="/shop">Shop</Nav.Link>
             <Nav.Link href="/favourites">Favourites</Nav.Link>
             <Nav.Link href="/cart">Cart ({cart.length})</Nav.Link>
-            <NavDropdown title="Text" id="basic-nav-dropdown">
+            <NavDropdown title={(user && user.email) ? user.email : 'Guest'} id="basic-nav-dropdown">
               {
                 (user && user.email) ? <>
                 <NavDropdown.Item href="/dashboard">Dashboard</NavDropdown.Item>
