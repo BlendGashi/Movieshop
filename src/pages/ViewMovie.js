@@ -49,7 +49,7 @@ const handleAddToFavourites = e => {
     {
       movie && <div className="row">
         <div className="col-6">
-        <img src={src} alt={movie.original_title} />
+        <img src={src} alt={movie.original_title} className='img-fluid' />
         <p className='my-4'>{movie.overview}</p>
         </div>
         <div className="col-6">
