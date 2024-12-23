@@ -66,7 +66,7 @@ function Cart() {
     <section className='py-5'>
     <Container>
       {
-        cart && <table className='table table-bordered'>
+        (cart && cart.length > 0) ? <table className='table table-bordered'>
         <thead>
           <tr>
             <th>Title</th>
@@ -93,11 +93,11 @@ function Cart() {
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="3"></td>
+            <td colSpan="3"></td>
             <td><b>${total.toFixed(2)}</b></td>
           </tr>
         </tfoot>
-      </table>
+      </table> : (cart && cart.length > 0) && <p><b>Cart is empty!</b></p>
       }
       {
         (user && user.email) ? <>
