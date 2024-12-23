@@ -2,13 +2,17 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Button, Container } from 'react-bootstrap'
 import { useLocalStorage } from '@uidotdev/usehooks';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
 const [orders, setOrders] = useState()
 const [user, saveUser] = useLocalStorage('user', {})
+const navigate = useNavigate()
 
 useEffect(() => {
-  if(user && user.email){
+
+    if(user.email ===  undefined) navigate('/')
+
     axios({
       method: 'GET',
       url: 'https://67643bae52b2a7619f5be822.mockapi.io/api/v1/users/${user.id}/orders',
@@ -17,26 +21,25 @@ useEffect(() => {
         setOrders(resp.data)
       }
     }).catch(e => console.log(e))
-  }
+  
 }, [])
 
   const handleDelete = e => {
-    if( (user && user.email) && window.confirm('Are you sure you want to delete this user?')){
+    if(window.confirm('Are you sure you want to delete this user?')){
       
     const id = e.target.getAttribute('id')
     
     axios({
       method: 'DELETE',
-      url: 'https://67643bae52b2a7619f5be822.mockapi.io/api/v1/orders',
+      url: 'https://67643bae52b2a7619f5be822.mockapi.io/api/v1/users/${user.id}/orders/${id}',
       data: {id}
     }).then(
       resp => {
-        // if (resp.status === 201) navigate('/login'); else alert('Something went wrong - try again');
-        console.log(resp)
+        if (resp.status === 200) navigate(0); else alert('Something went wrong - try again');
       }
     ).catch(e => console.log(e))
-    }
-  }
+    
+  }}
 
   return (
     <section className='py-5'>
